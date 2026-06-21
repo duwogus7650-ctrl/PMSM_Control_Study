@@ -30,8 +30,11 @@ void vInitController(void)
     float wc = TWO_PI * 300.0f;            // 300Hz
     g.pi_id.Kp = wc*LD;  g.pi_id.Ki = wc*RS;  g.pi_id.out_max = VMAX;
     g.pi_iq.Kp = wc*LQ;  g.pi_iq.Ki = wc*RS;  g.pi_iq.out_max = VMAX;
-    // 속도루프: 훨씬 느리게(이중 루프), 출력=iq 지령
-    g.pi_speed.Kp = 0.05f; g.pi_speed.Ki = 0.5f; g.pi_speed.out_max = 8.0f;
+    // 속도루프: 전류루프보다 훨씬 느리게(~10Hz). 출력=iq 지령.
+    // Python 시뮬(core/motor.py)과 동일한 표준식: Kp=J*wc/Kt, Ki=B*wc/Kt(+적분여유).
+    g.pi_speed.Kp = J_INERTIA * WC_SPEED / KT_CONST;
+    g.pi_speed.Ki = B_VISC    * WC_SPEED / KT_CONST + 0.05f;
+    g.pi_speed.out_max = IQ_LIMIT;
     pi_reset(&g.pi_id); pi_reset(&g.pi_iq); pi_reset(&g.pi_speed);
 
     g.mode = MODE_VECTOR;

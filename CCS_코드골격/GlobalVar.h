@@ -34,6 +34,13 @@
 #define VDC_NOM     24.0f          // DC 링크 공칭 전압 [V]
 #define VMAX        (VDC_NOM/SQRT3)// 선형변조 전압 한계 (자료04 변조한계)
 
+// 기계계 + 속도루프 게인용 (★Python 시뮬 core/motor.py 와 동일 출처/식)
+#define J_INERTIA   0.00002f       // 회전 관성 J [kg*m^2]
+#define B_VISC      0.00005f       // 점성 마찰계수 B [N*m*s]
+#define KT_CONST    (1.5f*POLE_PAIRS*LAMBDA_PM)  // 토크상수 Kt=Te/iq [N*m/A]
+#define WC_SPEED    (TWO_PI*10.0f)               // 속도루프 대역폭 ~10Hz
+#define IQ_LIMIT    8.0f                          // 속도루프 출력(iq 지령) 한계 [A]
+
 //------------------------------------------------------------------
 // 제어 모드 (자료 04: 제어 4단계)
 //------------------------------------------------------------------
