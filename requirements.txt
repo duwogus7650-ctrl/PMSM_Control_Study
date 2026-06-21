@@ -1,0 +1,16 @@
+# PMSM 제어·보드 학습툴 — 오프라인 실행 의존성
+# ------------------------------------------------------------------
+# 온라인 설치:   python -m pip install -r requirements.txt
+# 오프라인 설치: 미리 받아둔 wheel 폴더 사용
+#                python -m pip install --no-index --find-links=wheels -r requirements.txt
+#                (wheels 폴더 만들기:  pip download -r requirements.txt -d wheels)
+# 검증 완료 버전(2026-06): PyQt6 6.11.0 / pyqtgraph 0.14.0 / numpy 2.4.6 / Markdown 3.10.2 / pywin32 312
+# ------------------------------------------------------------------
+
+PyQt6>=6.6          # GUI 프레임워크 (탭·위젯·페인팅)
+pyqtgraph>=0.13     # 실시간 그래프 (3상 전류 / dq 전류 / 속도)
+numpy>=1.24         # pyqtgraph 가 요구하는 배열 연산 라이브러리
+Markdown>=3.5       # 학습자료 .md → HTML 변환 (0.학습 탭)
+
+# 선택 — AI 강사 한국어 음성(Windows SAPI). 없어도 자막으로 정상 동작.
+pywin32>=306 ; sys_platform == "win32"

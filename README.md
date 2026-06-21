@@ -7,13 +7,37 @@
 
 ## 실행 방법
 
+**가장 쉬운 방법 (Windows):** 폴더의 `run.bat` 더블클릭.
+환경을 점검한 뒤 GUI가 뜨고, 패키지가 빠졌으면 무엇을 설치하면 되는지 알려줍니다.
+
+**명령줄:**
 ```bash
 cd "C:\Users\user\Desktop\PMSM_학습툴"
-python main.py
+python -m pip install -r requirements.txt   # 처음 한 번 (의존성 설치)
+python run.py                               # 환경 점검 후 실행
+# 또는 점검 없이 바로:  python main.py
 ```
 
-필요 패키지: `PyQt6`, `numpy`, `scipy`, `pyqtgraph` (이미 설치 확인됨).
-모터 물리가 맞는지 직접 검증하려면: `python test_motor.py`
+### 오프라인 PC에서 실행 (인터넷 없는 환경)
+인터넷 되는 PC에서 wheel을 미리 받아 함께 복사하면 됩니다.
+```bash
+# (온라인 PC) 의존성 wheel 다운로드
+pip download -r requirements.txt -d wheels
+# → 프로젝트 폴더째 USB로 복사 후, (오프라인 PC)에서
+python -m pip install --no-index --find-links=wheels -r requirements.txt
+python run.py
+```
+
+### 필요 패키지
+| 패키지 | 용도 | 필수? |
+|---|---|---|
+| `PyQt6` | GUI 프레임워크 | 필수 |
+| `pyqtgraph` | 실시간 그래프 | 필수 |
+| `numpy` | pyqtgraph 의존(배열 연산) | 필수(자동) |
+| `Markdown` | 학습자료 .md → HTML | 필수 |
+| `pywin32` | AI 강사 한국어 음성(SAPI) | 선택 — 없으면 자막만 |
+
+> 모터 물리가 맞는지 직접 검증하려면: `python test_motor.py` (8개 항목 PASS 확인)
 
 ---
 
@@ -92,15 +116,24 @@ python main.py
 ## 파일 구조
 ```
 PMSM_학습툴/
-├── main.py             # 실행 진입점 (탭 3개 구성)
+├── run.bat             # Windows 더블클릭 실행 (환경 점검 후 GUI)
+├── run.py              # 오프라인 런처 (의존성 점검 → main 실행, --check 지원)
+├── requirements.txt    # 실행 의존성 (오프라인 설치 방법 포함)
+├── main.py             # 실행 진입점 (탭 4개 + 하단 AI 강사 가이드바)
 ├── test_motor.py       # 물리엔진 자가검증 (8개 항목 PASS)
 ├── core/
 │   └── motor.py        # PMSM 모델 + FOC 제어기 (검증된 물리)
-└── ui/
-    ├── style.py        # 엔지니어링 테마
-    ├── motor_view.py   # 모터 단면·벡터 시각화
-    ├── sim_tab.py      # 탭1 제어 시뮬레이터
-    ├── board_tab.py    # 탭2 보드 블록도
-    ├── board_data.py   # 소자 설명 데이터
-    └── comm_tab.py     # 탭3 통신 비교
+├── ui/
+│   ├── style.py        # 엔지니어링 테마(블루프린트 스틸+앰버)
+│   ├── motor_view.py   # 모터 단면·dq축·전류/전압 벡터 시각화
+│   ├── sim_tab.py      # 탭1 제어 시뮬레이터
+│   ├── learn_tab.py    # 탭0 학습(레벨 1~10 슬라이더)
+│   ├── learn_anim.py   # 학습 탭 개념 애니메이션
+│   ├── board_tab.py    # 탭2 보드 블록도
+│   ├── board_data.py   # 소자 설명 데이터
+│   ├── comm_tab.py     # 탭3 통신 비교
+│   ├── guide.py        # AI 강사(SAPI 음성) 가이드 엔진
+│   └── guide_scripts.py# 강의 대본
+├── 학습자료/           # 00~04 마크다운 + media/ 이미지
+└── CCS_코드골격/        # TMS320F28377D FOC 펌웨어 골격(C, 구조 학습용)
 ```
